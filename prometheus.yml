@@ -1,0 +1,72 @@
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+    - targets: ['prometheus:9090']
+
+  - job_name: 'cadvisor'
+    static_configs:
+    - targets: ['127.0.0.1:8880', '127.0.0.1:8880', '127.0.0.1:8880']
+
+#, '127.0.0.1:8880', '127.0.0.1:8880']
+
+  - job_name: 'node_exporter'
+    static_configs:
+    - targets: ['127.0.0.1:9100', '127.0.0.1:9100', '127.0.0.1:9100']
+
+  - job_name: 'MS-DevOps'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19080']
+     
+  - job_name: 'MS-DevOps2'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19089']   
+
+  - job_name: 'MS-otro'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19087']
+
+  - job_name: 'MS-otro2'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19088']
+     
+  - job_name: 'MS-otro3'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19090']   
+       
+  - job_name: 'MS-EXAMPLE'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19091']   
+
+  - job_name: 'MS-EXAMPLE2'
+    scrape_interval: 5s
+    static_configs:
+     - targets: ['127.0.0.1:19092']       
+
+  - job_name: 'blackbox'
+    metrics_path: /probe
+    params:
+        module: [http_2xx]
+    static_configs:
+        - targets:
+            - https://sosafernando.com
+            - https://pillacurioso.com
+
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: 127.0.0.1:9115  # The blackbox exporter's real hostname:port.
+
